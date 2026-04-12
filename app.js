@@ -78,6 +78,7 @@ app.put('/tasks/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server error');
   }
+
 });
 
 // Delete a task
@@ -98,4 +99,25 @@ app.delete('/tasks/:id', async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+
+// Simple auth middleware
+function checkAuth(req, res, next) {
+  const token = req.headers["authorization"];
+
+  if (token === "mysecrettoken") {
+    next();
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+}
+
+// Public route
+app.get("/", (req, res) => {
+  res.send("API is running!");
+});
+
+// Protected route
+app.get("/secure", checkAuth, (req, res) => {
+  res.json({ message: "Secure route accessed" });
 });
