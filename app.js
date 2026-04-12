@@ -121,3 +121,11 @@ app.get("/", (req, res) => {
 app.get("/secure", checkAuth, (req, res) => {
   res.json({ message: "Secure route accessed" });
 });
+app.get("/db-test", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    res.json({ time: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: "DB connection failed" });
+  }
+});
