@@ -39,8 +39,11 @@ app.get("/db-test", async (req, res) => {
       time: result.rows[0],
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "DB connection failed" });
+    console.error("DB TEST ERROR:", err);
+    res.status(500).json({
+      error: "DB connection failed",
+      details: err.message,
+    });
   }
 });
 
